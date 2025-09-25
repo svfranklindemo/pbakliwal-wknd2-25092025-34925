@@ -219,8 +219,7 @@ const processEdits = async (projectId, demoId) => {
           projectId +
           "/assets/" +
           edit.newValue.assetId +
-          "/proxy?assetName=" +
-          edit.newValue.assetName,
+          "/rendition?size=original",
         pathToModify: pathToModify || edit.xPath || "",
         name: edit.newValue.assetId || "",
         originalEdit: edit,
@@ -241,6 +240,11 @@ const getPayloadUpdates = async () => {
     const copilotParam =
       urlParams.get("copilotEditor") || urlParams.get("copilotPreview");
     const ids = extractIds(copilotParam);
+
+    const token = getAuthToken();
+    if (!token) {
+      throw new Error("Authentication token not found");
+    }
 
     if (!ids) {
       console.error("Invalid project/demo IDs in URL");
@@ -348,4 +352,3 @@ export async function uploadAsset() {
     throw error;
   }
 }
-
